@@ -3,8 +3,21 @@ require('dotenv').config();
 const {Telegraf} = require('telegraf');
 const cron = require('node-cron');
 
-// const app = express();
 const bot = new Telegraf(process.env.BOT_TOKEN);
+const app = express();
+
+app.use(express.json());
+app.use(bot.webhookCallback('/bot'));
+
+bot.telegram.setWebhook(process.env.WEBHOOK_URL + '/bot');
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log('Server started on port', PORT);
+});
+
+// const app = express();
+// const bot = new Telegraf(process.env.BOT_TOKEN);
 const isCronSetForChat = new Map();
 
 // app.use(bot.webhookCallback('/bot'));
@@ -68,9 +81,9 @@ bot.command('weeklypoll', async (ctx) => {
 });
 
 // Запуск бота
-bot.launch(() => {
-    console.log('Бот запущено');
-})
+// bot.launch(() => {
+//     console.log('Бот запущено');
+// })
 
 // const PORT = process.env.PORT || 3000;
 // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
