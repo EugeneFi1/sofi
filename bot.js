@@ -21,7 +21,7 @@ const pollTemplate = {
 };
 
 // Функція відправки опитування
-async function sendWeeklyPoll(chatId) {
+async function sendPoll(chatId) {
     try {
         await bot.telegram.sendPoll(
             chatId,
@@ -32,7 +32,7 @@ async function sendWeeklyPoll(chatId) {
                 allows_multiple_answers: pollTemplate.allows_multiple_answers,
             }
         );
-        console.log('Опитування відправлено');
+        console.log('Опитування відправлено, chatId: ', chatId);
     } catch (err) {
         console.error('Помилка надсилання опитування:', err);
     }
@@ -41,7 +41,7 @@ async function sendWeeklyPoll(chatId) {
 // Команда ручного запуску
 bot.command('sendpoll', async (ctx) => {
     const chatId = ctx.update.message.chat.id;
-    await sendWeeklyPoll(chatId);
+    await sendPoll(chatId);
 });
 
 bot.command('weeklypoll', async (ctx) => {
@@ -61,7 +61,7 @@ bot.command('weeklypoll', async (ctx) => {
         CRON_SCHEDULE,
         async () => {
             console.log('CRON: відправка опитування');
-            await sendWeeklyPoll(chatId);
+            await sendPoll(chatId);
         },
         {scheduled: true, timezone: TIMEZONE}
     );
