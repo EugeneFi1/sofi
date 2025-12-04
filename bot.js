@@ -1,8 +1,12 @@
+const express = require('express');
 require('dotenv').config();
 const {Telegraf} = require('telegraf');
 const cron = require('node-cron');
 
+const app = express();
 const bot = new Telegraf(process.env.BOT_TOKEN);
+
+app.use(bot.webhookCallback('/bot'));
 
 const CRON_SCHEDULE = process.env.CRON_SCHEDULE || '0 17 * * 3'; // default Monday 09:00
 const TIMEZONE = process.env.TIMEZONE || 'Europe/Kyiv';
@@ -59,6 +63,12 @@ bot.command('weeklypoll', async (ctx) => {
 bot.launch(() => {
     console.log('Бот запущено');
 })
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// Установити webhook
+bot.telegram.setWebhook(`https://sofi-py9t.onrender.com/bot`);
 
 // Graceful shutdown
 process.once('SIGINT', () => bot.stop('SIGINT'));
