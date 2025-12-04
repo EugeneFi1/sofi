@@ -39,10 +39,10 @@ bot.command('sendpoll', async (ctx) => {
     await sendWeeklyPoll(chatId);
 });
 
-bot.command('weekly', async (ctx) => {
+bot.command('weeklypoll', async (ctx) => {
     const chatId = ctx.update.message.chat.id;
 
-    ctx.reply('Опитування буде відправлятись щотижня в Четвер 11:00.');
+    ctx.reply('Опитування буде відправлятись щотижня.');
 
     // Щотижневий cron
     cron.schedule(
@@ -58,16 +58,6 @@ bot.command('weekly', async (ctx) => {
 // Запуск бота
 bot.launch(() => {
     console.log('Бот запущено');
-
-    // Щотижневий cron
-    // cron.schedule(
-    //     CRON_SCHEDULE,
-    //     () => {
-    //         console.log('CRON: відправка опитування');
-    sendWeeklyPoll();
-    //     },
-    //     { scheduled: true, timezone: TIMEZONE }
-    // );
 })
 
 // Graceful shutdown
