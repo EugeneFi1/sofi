@@ -5,6 +5,7 @@ const cron = require('node-cron');
 
 const app = express();
 const bot = new Telegraf(process.env.BOT_TOKEN);
+const isCronSetForChat = new Map();
 
 app.use(bot.webhookCallback('/bot'));
 
@@ -45,6 +46,13 @@ bot.command('sendpoll', async (ctx) => {
 
 bot.command('weeklypoll', async (ctx) => {
     const chatId = ctx.update.message.chat.id;
+
+    if (isCronSetForChat.get(chatId)) {
+        ctx.reply('Щотижневе опитування налаштовано.');
+        return;
+    }
+
+    isCronSetForChat.set(chatId, true);
 
     ctx.reply('Опитування буде відправлятись щотижня.');
 
