@@ -59,12 +59,12 @@ async function sendPoll(chatId) {
     }
 }
 
-bot.command('sendPoll', async (ctx) => {
+bot.command('sendpoll', async (ctx) => {
     const chatId = ctx.chat.id;
     await sendPoll(chatId);
 });
 
-bot.command('weeklyPoll', async (ctx) => {
+bot.command('weeklypoll', async (ctx) => {
     const chatId = ctx.chat.id;
 
     if (isCronSetForChat.get(chatId)) {
@@ -75,7 +75,7 @@ bot.command('weeklyPoll', async (ctx) => {
     ctx.reply('Опитування буде відправлятись щотижня.');
 });
 
-bot.command('offWeeklyPoll', async (ctx) => {
+bot.command('offweeklypoll', async (ctx) => {
     const chatId = ctx.chat.id;
 
     isCronSetForChat.delete(chatId);
