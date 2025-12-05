@@ -1,15 +1,17 @@
 require('dotenv').config();
 const express = require('express');
-const { Telegraf } = require('telegraf');
+const {Telegraf} = require('telegraf');
 const cron = require('node-cron');
+
+const WEBHOOK_URL = process.env.WEBHOOK_URL;
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const app = express();
+
 app.use(express.json());
 
-// === Webhook ===
-const WEBHOOK_URL = process.env.WEBHOOK_URL; // https://yourapp.herokuapp.com
 bot.telegram.setWebhook(`${WEBHOOK_URL}/bot`);
+
 app.use(bot.webhookCallback('/bot'));
 
 if (process.env.DYNO === "web.1") {
@@ -31,10 +33,8 @@ if (process.env.DYNO === "web.1") {
     );
 }
 
-// Збереження чатів які включили weeklypoll
 const isCronSetForChat = new Map();
 
-// Опитування яке буде створюватися щотижня
 const pollTemplate = {
     question: 'Будеш цієї неділі?',
     options: ['Так', 'Ні'],
@@ -42,7 +42,6 @@ const pollTemplate = {
     allows_multiple_answers: false,
 };
 
-// Функція відправки опитування
 async function sendPoll(chatId) {
     try {
         await bot.telegram.sendPoll(
@@ -60,14 +59,12 @@ async function sendPoll(chatId) {
     }
 }
 
-// Команда ручного запуску
-bot.command('sendpoll', async (ctx) => {
+bot.command('sendPoll', async (ctx) => {
     const chatId = ctx.chat.id;
     await sendPoll(chatId);
 });
 
-// Увімкнути weeklypoll
-bot.command('weeklypoll', async (ctx) => {
+bot.command('weeklyPoll', async (ctx) => {
     const chatId = ctx.chat.id;
 
     if (isCronSetForChat.get(chatId)) {
@@ -78,7 +75,14 @@ bot.command('weeklypoll', async (ctx) => {
     ctx.reply('Опитування буде відправлятись щотижня.');
 });
 
-// --- Запуск вебсерверу ---
+bot.command('offWeeklyPoll', async (ctx) => {
+    const chatId = ctx.chat.id;
+
+    isCronSetForChat.delete(chatId);
+
+    ctx.reply('Щотижневе опитування виключено.');
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log('Server started on port', PORT);
