@@ -33,7 +33,7 @@ if (process.env.DYNO === "web.1") {
     );
 }
 
-const chatIds = process.env.CHAT_IDS.split(',');
+const chatIds = (process.env.CHAT_IDS || '').split(',');
 
 const isCronSetForChat = new Map();
 
