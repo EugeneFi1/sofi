@@ -40,7 +40,7 @@ const isCronSetForChat = new Map();
 chatIds.forEach((chatId) => {
     console.log('Включити щотижневе опитування для чату chatId: ', chatId);
 
-    isCronSetForChat.set(chatId, true)
+    isCronSetForChat.set(Number(chatId), true)
 });
 
 const pollTemplate = {
