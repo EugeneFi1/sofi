@@ -33,7 +33,15 @@ if (process.env.DYNO === "web.1") {
     );
 }
 
+const chatIds = process.env.CHAT_IDS.split(',');
+
 const isCronSetForChat = new Map();
+
+chatIds.forEach((chatId) => {
+    console.log('Включити щотижневе опитування для чату chatId: ', chatId);
+
+    isCronSetForChat.set(chatId, true)
+});
 
 const pollTemplate = {
     question: 'Будеш цієї неділі?',
