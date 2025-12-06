@@ -68,7 +68,10 @@ async function sendPoll(chatId) {
 }
 
 bot.command('chatinfo', async (ctx) => {
-    console.dir(ctx.body, {depth: null, colors: true});
+    console.dir({
+        chatId: ctx.chat.id,
+        chat: ctx.chat
+    }, {depth: null, colors: true});
 });
 
 bot.command('sendpoll', async (ctx) => {
