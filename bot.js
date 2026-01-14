@@ -14,8 +14,6 @@ bot.telegram.setWebhook(`${WEBHOOK_URL}/bot`);
 
 app.use(bot.webhookCallback('/bot'));
 
-if (process.env.DYNO === "web.1") {
-    console.log("Cron enabled on web.1 dyno");
 
     cron.schedule(
         process.env.CRON_SCHEDULE || '0 17 * * 3',
@@ -31,7 +29,6 @@ if (process.env.DYNO === "web.1") {
             timezone: process.env.TIMEZONE || 'Europe/Kyiv',
         }
     );
-}
 
 const chatIds = (process.env.CHAT_IDS || '').split(',');
 
